@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <title>IP Logger</title>
+ </head>
+ <body>
+ <h1>IP Logger</h1>
+ <p>Enter a URL below to log the IP address of the user who clicks on it:</p>
+ <form id="urlForm">
+ <input type="text" id="url" name="url" placeholder="Enter URL here...">
+ <button type="submit">Log IP</button>
+ </form>
+ <script>
+ document.getElementById('urlForm').addEventListener('submit', function(event) {
+ event.preventDefault();
+ const url = document.getElementById('url').value;
+ const xhr = new XMLHttpRequest();
+ xhr.open('GET', `https://ipapi.co/json/`, true);
+ xhr.onload = function() {
+ if (xhr.status === 200) {
+ const ip = JSON.parse(xhr.responseText).ip;
+ const message = `New IP logged:\n\nIP: ${ip}\nURL: ${url}`;
+ const xhr2 = new XMLHttpRequest();
+ xhr2.open('POST', 'YOUR DISCORD WEBHOOK HERE', true);
+ xhr2.setRequestHeader('Content-Type', 'application/json');
+ xhr2.onload = function() {
+ if (xhr2.status === 204) {
+ console.log('IP logged to Discord webhook');
+ }
+ };
+ xhr2.send(JSON.stringify({ content: message }));
+ }
+ };
+ xhr.send();
+ });
+ </script>
+ </body>
+</html>
